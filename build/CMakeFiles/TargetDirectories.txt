@@ -1,0 +1,3 @@
+C:/wamp64/www/Projet Piscine/Environnement-3D-en-cpp-avec-Allegro/build/CMakeFiles/Environnement-3D-en-cpp-avec-Allegro.dir
+C:/wamp64/www/Projet Piscine/Environnement-3D-en-cpp-avec-Allegro/build/CMakeFiles/ALL_BUILD.dir
+C:/wamp64/www/Projet Piscine/Environnement-3D-en-cpp-avec-Allegro/build/CMakeFiles/ZERO_CHECK.dir

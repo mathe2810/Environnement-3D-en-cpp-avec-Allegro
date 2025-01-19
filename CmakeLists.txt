@@ -1,0 +1,34 @@
+cmake_minimum_required(VERSION 3.10)
+project(Environnement-3D-en-cpp-avec-Allegro)
+
+# Utiliser vcpkg
+set(CMAKE_TOOLCHAIN_FILE "C:/vcpkg/scripts/buildsystems/vcpkg.cmake" CACHE STRING "Vcpkg toolchain file")
+
+# Ajouter les fichiers source
+add_executable(Environnement-3D-en-cpp-avec-Allegro ./src/main.cpp)
+
+# Ajouter un message de débogage pour vérifier les chemins de recherche
+message(STATUS "CMAKE_TOOLCHAIN_FILE: ${CMAKE_TOOLCHAIN_FILE}")
+message(STATUS "CMAKE_PREFIX_PATH: ${CMAKE_PREFIX_PATH}")
+
+# Trouver et lier les bibliothèques Allegro 5, OpenGL et tinyobjloader
+find_package(Allegro CONFIG REQUIRED)
+
+include_directories("C:/vcpkg/installed/x64-windows/include")
+
+
+
+target_link_libraries(Environnement-3D-en-cpp-avec-Allegro PRIVATE
+    Allegro::allegro
+    Allegro::allegro_primitives
+    Allegro::allegro_color
+    Allegro::allegro_dialog
+    Allegro::allegro_font
+    Allegro::allegro_ttf
+)
+
+# Copier les DLL nécessaires dans le répertoire de build
+add_custom_command(TARGET Environnement-3D-en-cpp-avec-Allegro POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    "C:/vcpkg/installed/x64-windows/bin"
+    $<TARGET_FILE_DIR:Environnement-3D-en-cpp-avec-Allegro>)

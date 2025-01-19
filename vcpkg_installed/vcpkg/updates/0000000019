@@ -1,0 +1,9 @@
+Package: opusfile
+Version: 0.12+20221121
+Port-Version: 1
+Depends: libogg, opus, vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-windows
+Multi-Arch: same
+Abi: e6631d78c1e4e7b42eab3d7fcef307dd064bc4d84a1b0cd42a04309d375e260c
+Description: Stand-alone decoder library for .opus streams
+Status: install ok installed

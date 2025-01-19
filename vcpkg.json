@@ -1,0 +1,9 @@
+{
+    "name": "entrainement-cpp",
+    "version": "1.0.0",
+    "dependencies": [
+        "allegro5",
+        "tinyobjloader",
+        "tinygltf"
+    ]
+}

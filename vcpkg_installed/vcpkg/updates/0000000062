@@ -1,0 +1,9 @@
+Package: allegro5
+Version: 5.2.10.0
+Depends: bzip2, freetype, libflac, libjpeg-turbo, libogg, libpng, libtheora, libvorbis, libwebp, minimp3, openal-soft, opus, opusfile, physfs, vcpkg-cmake, vcpkg-cmake-config, zlib
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 504ca14d3c9df66c163c0f8c250e48dff50918d51492f2e86c5a76a8fbd6ed1c
+Description: Allegro is a cross-platform library mainly aimed at video game and multimedia programming. It handles common, low-level tasks such as creating windows, accepting user input, loading data, drawing images, playing sounds, etc. and generally abstracting away the underlying platform. However, Allegro is not a game engine: you are free to design and structure your program as you like.
+Default-Features: direct3d, opengl
+Status: install ok half-installed

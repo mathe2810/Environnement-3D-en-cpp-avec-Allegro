@@ -1,0 +1,10 @@
+^C:\WAMP64\WWW\PROJET PISCINE\ENVIRONNEMENT-3D-EN-CPP-AVEC-ALLEGRO\BUILD\CMAKEFILES\C881003EF9FD085FDFD7480BA4071878\GENERATE.STAMP.RULE
+setlocal
+C:\CMake\bin\cmake.exe "-SC:/wamp64/www/Projet Piscine/Environnement-3D-en-cpp-avec-Allegro" "-BC:/wamp64/www/Projet Piscine/Environnement-3D-en-cpp-avec-Allegro/build" --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file "C:/wamp64/www/Projet Piscine/Environnement-3D-en-cpp-avec-Allegro/build/Environnement-3D-en-cpp-avec-Allegro.sln"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

@@ -1,0 +1,6 @@
+Package: allegro5
+Feature: direct3d
+Architecture: x64-windows
+Multi-Arch: same
+Description: Direct3D support
+Status: install ok half-installed

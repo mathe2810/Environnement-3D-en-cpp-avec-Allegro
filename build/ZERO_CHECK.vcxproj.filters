@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\wamp64\www\Projet Piscine\Environnement-3D-en-cpp-avec-Allegro\build\CMakeFiles\c881003ef9fd085fdfd7480ba4071878\generate.stamp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{0B7C960E-5E4B-3430-83B6-0FD363DC3A5C}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
