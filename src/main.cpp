@@ -31,6 +31,7 @@ struct Triangle {
 std::vector<Vertex> vertices;
 std::vector<Triangle> triangles;
 Vertex referencePoint = {0.0f, 0.0f, 0.0f}; // Point de référence pour les rotations
+Vertex referencelightSource = {0.0f, 0.0f, 0.0f};    // Source de lumière
 
 // Fonction pour projeter un point 3D sur un plan 2D
 void projectVertex(const Vertex& vertex, float& x2D, float& y2D, float distance) {
@@ -73,12 +74,12 @@ void translate(Vertex& vertex, float dx, float dy, float dz) {
 }
 
 // Fonction pour calculer l'intensité de la lumière
-float calculateLightIntensity(const Vertex& vertex, const Vertex& lightSource) {
+float calculateLightIntensity(const Vertex& vertex, const Vertex& lightSource, float intensity) {
     float dx = lightSource.x - vertex.x;
     float dy = lightSource.y - vertex.y;
     float dz = lightSource.z - vertex.z;
     float distance = sqrt(dx * dx + dy * dy + dz * dz);
-    return 1.0f / (distance * distance); // Inverse square law
+    return  intensity / (distance * distance); // Inverse square law
 }
 
 // Fonction pour calculer la distance moyenne d'un triangle par rapport à la caméra
@@ -87,6 +88,65 @@ float calculateTriangleDistance(const Triangle& triangle) {
     float z2 = vertices[triangle.indices[1]].z;
     float z3 = vertices[triangle.indices[2]].z;
     return (z1 + z2 + z3) / 3.0f;
+}
+
+std::vector<Vertex> generateCircleVertices(const Vertex& center, float radius, int segments) {
+    std::vector<Vertex> circleVertices;
+    for (int i = 0; i < segments; ++i) {
+        float angle = 2.0f * M_PI * i / segments;
+        Vertex vertex;
+        vertex.x = center.x + radius * cos(angle);
+        vertex.y = center.y + radius * sin(angle);
+        vertex.z = center.z;
+        vertex.r = 1.0f;
+        vertex.g = 1.0f;
+        vertex.b = 0.0f;
+        circleVertices.push_back(vertex);
+    }
+    return circleVertices;
+}
+
+
+std::vector<Vertex> generateSphereVertices(float radius, int stacks, int slices) {
+    std::vector<Vertex> sphereVertices;
+    for (int i = 0; i <= stacks; ++i) {
+        float phi = M_PI * i / stacks;
+        for (int j = 0; j <= slices; ++j) {
+            float theta = 2.0f * M_PI * j / slices;
+            Vertex vertex;
+            vertex.x = radius * sin(phi) * cos(theta);
+            vertex.y = radius * sin(phi) * sin(theta);
+            vertex.z = radius * cos(phi);
+            vertex.r = 1.0f;
+            vertex.g = 1.0f;
+            vertex.b = 1.0f;
+            sphereVertices.push_back(vertex);
+        }
+    }
+    return sphereVertices;
+}
+
+std::vector<Triangle> generateSphereTriangles(int stacks, int slices) {
+    std::vector<Triangle> sphereTriangles;
+    for (int i = 0; i < stacks; ++i) {
+        for (int j = 0; j < slices; ++j) {
+            int first = (i * (slices + 1)) + j;
+            int second = first + slices + 1;
+
+            Triangle triangle1;
+            triangle1.indices[0] = first;
+            triangle1.indices[1] = second;
+            triangle1.indices[2] = first + 1;
+            sphereTriangles.push_back(triangle1);
+
+            Triangle triangle2;
+            triangle2.indices[0] = second;
+            triangle2.indices[1] = second + 1;
+            triangle2.indices[2] = first + 1;
+            sphereTriangles.push_back(triangle2);
+        }
+    }
+    return sphereTriangles;
 }
 
 int main() {
@@ -157,27 +217,35 @@ int main() {
     al_clear_to_color(al_map_rgb(0, 0, 0));
     al_flip_display();
 
-    // Créer des points 3D
-    vertices = {
-        { -1.0f, -1.0f,  1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f },
-        {  1.0f, -1.0f,  1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f },
-        {  1.0f,  1.0f,  1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f },
-        { -1.0f,  1.0f,  1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f },
-        { -1.0f, -1.0f, -1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f },
-        {  1.0f, -1.0f, -1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f },
-        {  1.0f,  1.0f, -1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f },
-        { -1.0f,  1.0f, -1.0f, 0.5f, 0.5f, 0.5f, 0.0f, 0.0f }
-    };
 
-    // Définir les triangles
-    triangles = {
-        {{0, 1, 2}, 0.0f}, {{2, 3, 0}, 0.0f},  // Face avant
-        {{4, 5, 6}, 0.0f}, {{6, 7, 4}, 0.0f},  // Face arrière
-        {{0, 1, 5}, 0.0f}, {{5, 4, 0}, 0.0f},  // Face inférieure
-        {{2, 3, 7}, 0.0f}, {{7, 6, 2}, 0.0f},  // Face supérieure
-        {{0, 3, 7}, 0.0f}, {{7, 4, 0}, 0.0f},  // Face gauche
-        {{1, 2, 6}, 0.0f}, {{6, 5, 1}, 0.0f}   // Face droite
-    };
+    // // Créer des points 3D carrés
+    // vertices = {
+    //     { -1.0f, -1.0f,  1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f },
+    //     {  1.0f, -1.0f,  1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f },
+    //     {  1.0f,  1.0f,  1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f },
+    //     { -1.0f,  1.0f,  1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f },
+    //     { -1.0f, -1.0f, -1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f },
+    //     {  1.0f, -1.0f, -1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f },
+    //     {  1.0f,  1.0f, -1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f },
+    //     { -1.0f,  1.0f, -1.0f, 0.5f, 0.5f, 0.5f, 0.0f, 0.0f }
+    // };
+
+    // // Définir les triangles
+    // triangles = {
+    //     {{0, 1, 2}, 0.0f}, {{2, 3, 0}, 0.0f},  // Face avant
+    //     {{4, 5, 6}, 0.0f}, {{6, 7, 4}, 0.0f},  // Face arrière
+    //     {{0, 1, 5}, 0.0f}, {{5, 4, 0}, 0.0f},  // Face inférieure
+    //     {{2, 3, 7}, 0.0f}, {{7, 6, 2}, 0.0f},  // Face supérieure
+    //     {{0, 3, 7}, 0.0f}, {{7, 4, 0}, 0.0f},  // Face gauche
+    //     {{1, 2, 6}, 0.0f}, {{6, 5, 1}, 0.0f}   // Face droite
+    // };
+
+    // Créer des points 3D pour une sphère
+    float radius = 1.0f;
+    int stacks = 20; // Réduire le nombre de stacks
+    int slices = 20; // Réduire le nombre de slices
+    vertices = generateSphereVertices(radius, stacks, slices);
+    triangles = generateSphereTriangles(stacks, slices);
 
     // Distance de projection
     float distance = 5.0f;
@@ -188,11 +256,40 @@ int main() {
     // Tableau pour suivre l'état des touches
     bool key[ALLEGRO_KEY_MAX] = { false };
 
+    ALLEGRO_TIMER* timer = al_create_timer(1.0 / 60.0);
+    al_register_event_source(event_queue, al_get_timer_event_source(timer));
+    al_start_timer(timer);
+
     // Boucle principale
-    bool running = true;
-    while (running) {
+  bool running = true;
+while (running) {
+    ALLEGRO_EVENT ev;
+    al_wait_for_event(event_queue, &ev);
+
+    if (ev.type == ALLEGRO_EVENT_TIMER) {
         // Effacer l'écran
         al_clear_to_color(al_map_rgb(0, 0, 0));
+
+        // faire tourner la lumière
+        rotateY(lightSource, 1.0f, referencelightSource);
+
+        // Générer les sommets du cercle représentant la source de lumière en 3D
+        std::vector<Vertex> circleVertices = generateCircleVertices(lightSource, 0.5f, 36); // rayon = 0.5, segments = 36
+        std::vector<Triangle> circleTriangles;
+
+        // Vérifier que circleVertices contient au moins deux sommets
+        if (circleVertices.size() > 1) {
+            for (size_t i = 0; i < circleVertices.size() - 1; ++i) {
+                Triangle triangle;
+                triangle.indices[0] = static_cast<unsigned int>(i);
+                triangle.indices[1] = static_cast<unsigned int>((i + 1) % (circleVertices.size() - 1));
+                triangle.indices[2] = static_cast<unsigned int>(circleVertices.size() - 1); // Centre du cercle
+                circleTriangles.push_back(triangle);
+            }
+
+            // Ajouter les triangles du cercle à la liste des triangles
+            triangles.insert(triangles.end(), circleTriangles.begin(), circleTriangles.end());
+        }
 
         // Calculer la distance moyenne de chaque triangle par rapport à la caméra
         for (auto& triangle : triangles) {
@@ -212,9 +309,9 @@ int main() {
             projectVertex(vertices[triangle.indices[2]], x2D3, y2D3, distance);
 
             // Calculer l'intensité de la lumière pour chaque sommet
-            float intensity1 = calculateLightIntensity(vertices[triangle.indices[0]], lightSource);
-            float intensity2 = calculateLightIntensity(vertices[triangle.indices[1]], lightSource);
-            float intensity3 = calculateLightIntensity(vertices[triangle.indices[2]], lightSource);
+            float intensity1 = calculateLightIntensity(vertices[triangle.indices[0]], lightSource, 2.5f);
+            float intensity2 = calculateLightIntensity(vertices[triangle.indices[1]], lightSource, 2.5f);
+            float intensity3 = calculateLightIntensity(vertices[triangle.indices[2]], lightSource, 2.5f);
 
             // Limiter l'intensité de la lumière à 1.0
             intensity1 = std::min(intensity1, 1.0f);
@@ -249,102 +346,48 @@ int main() {
 
         // Afficher le rendu
         al_flip_display();
-
-        // Gérer les événements
-        ALLEGRO_EVENT ev;
-        while (al_get_next_event(event_queue, &ev)) {
-            if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
-                running = false;
-            } else if (ev.type == ALLEGRO_EVENT_KEY_DOWN) {
-                key[ev.keyboard.keycode] = true;
-            } else if (ev.type == ALLEGRO_EVENT_KEY_UP) {
-                key[ev.keyboard.keycode] = false;
-            }
-        }
-
-        // Appliquer les transformations en fonction des touches enfoncées
-        if (key[ALLEGRO_KEY_UP]) {
-            for (auto& vertex : vertices) {
-                translate(vertex, 0.0f, 0.1f, 0.0f);
-            }
-            translate(referencePoint, 0.0f, 0.1f, 0.0f);
-        }
-        if (key[ALLEGRO_KEY_DOWN]) {
-            for (auto& vertex : vertices) {
-                translate(vertex, 0.0f, -0.1f, 0.0f);
-            }
-            translate(referencePoint, 0.0f, -0.1f, 0.0f);
-        }
-        if (key[ALLEGRO_KEY_LEFT]) {
-            for (auto& vertex : vertices) {
-                translate(vertex, -0.1f, 0.0f, 0.0f);
-            }
-            translate(referencePoint, -0.1f, 0.0f, 0.0f);
-        }
-        if (key[ALLEGRO_KEY_RIGHT]) {
-            for (auto& vertex : vertices) {
-                translate(vertex, 0.1f, 0.0f, 0.0f);
-            }
-            translate(referencePoint, 0.1f, 0.0f, 0.0f);
-        }
-        if (key[ALLEGRO_KEY_Z]) {
-            for (auto& vertex : vertices) {
-                translate(vertex, 0.0f, 0.0f, 0.1f);
-            }
-            translate(referencePoint, 0.0f, 0.0f, 0.1f);
-        }
-        if (key[ALLEGRO_KEY_S]) {
-            for (auto& vertex : vertices) {
-                translate(vertex, 0.0f, 0.0f, -0.1f);
-            }
-            translate(referencePoint, 0.0f, 0.0f, -0.1f);
-        }
-        if (key[ALLEGRO_KEY_X]) {
-            for (auto& vertex : vertices) {
-                rotateX(vertex, 5.0f, referencePoint);
-            }
-        }
-        if (key[ALLEGRO_KEY_C]) {
-            for (auto& vertex : vertices) {
-                rotateX(vertex, -5.0f, referencePoint);
-            }
-        }
-        if (key[ALLEGRO_KEY_U]) {
-            for (auto& vertex : vertices) {
-                rotateY(vertex, -5.0f, referencePoint);
-            }
-        }
-        if (key[ALLEGRO_KEY_Y]) {
-            for (auto& vertex : vertices) {
-                rotateY(vertex, 5.0f, referencePoint);
-            }
-        }
-        if (key[ALLEGRO_KEY_Z]) {
-            for (auto& vertex : vertices) {
-                rotateZ(vertex, 5.0f, referencePoint);
-            }
-        }
-        if (key[ALLEGRO_KEY_X]) {
-            for (auto& vertex : vertices) {
-                rotateZ(vertex, -5.0f, referencePoint);
-            }
-        }
-        if (key[ALLEGRO_KEY_ESCAPE]) {
-            running = false;
-        }
-
-        // Attendre un peu
-        al_rest(0.01);
+    } else if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
+        running = false;
+    } else if (ev.type == ALLEGRO_EVENT_KEY_DOWN) {
+        key[ev.keyboard.keycode] = true;
+    } else if (ev.type == ALLEGRO_EVENT_KEY_UP) {
+        key[ev.keyboard.keycode] = false;
     }
 
-    // Détruire la file d'événements
-    al_destroy_event_queue(event_queue);
+    // Gérer les touches
+    if (key[ALLEGRO_KEY_U]) {
+        for (auto& vertex : vertices) {
+            rotateY(vertex, -5.0f, referencePoint);
+        }
+    }
+    if (key[ALLEGRO_KEY_Y]) {
+        for (auto& vertex : vertices) {
+            rotateY(vertex, 5.0f, referencePoint);
+        }
+    }
+    if (key[ALLEGRO_KEY_I]) {
+        for (auto& vertex : vertices) {
+            rotateZ(vertex, 5.0f, referencePoint);
+        }
+    }
+    if (key[ALLEGRO_KEY_O]) {
+        for (auto& vertex : vertices) {
+            rotateZ(vertex, -5.0f, referencePoint);
+        }
+    }
+    if (key[ALLEGRO_KEY_ESCAPE]) {
+        running = false;
+    }
+}
 
-    // Détruire la police
-    al_destroy_font(font);
+// Détruire la file d'événements
+al_destroy_event_queue(event_queue);
 
-    // Détruire la fenêtre
-    al_destroy_display(display);
+// Détruire la police
+al_destroy_font(font);
 
-    return 0;
+// Détruire le timer
+al_destroy_timer(timer);
+
+return 0;
 }

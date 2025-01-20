@@ -24,13 +24,13 @@ C:/CMake/share/cmake-3.31/Modules/Platform/Windows-MSVC-CXX.cmake
 C:/CMake/share/cmake-3.31/Modules/Platform/Windows-MSVC.cmake
 C:/CMake/share/cmake-3.31/Modules/Platform/Windows.cmake
 C:/CMake/share/cmake-3.31/Modules/Platform/WindowsPaths.cmake
-C:/vcpkg/installed/x64-windows/share/allegro5/AllegroConfig.cmake
-C:/vcpkg/installed/x64-windows/share/allegro5/AllegroConfigVersion.cmake
-C:/vcpkg/installed/x64-windows/share/allegro5/AllegroTargets-debug.cmake
-C:/vcpkg/installed/x64-windows/share/allegro5/AllegroTargets-release.cmake
-C:/vcpkg/installed/x64-windows/share/allegro5/AllegroTargets.cmake
-C:/wamp64/www/Projet Piscine/Environnement-3D-en-cpp-avec-Allegro/CMakeLists.txt
-C:/wamp64/www/Projet Piscine/Environnement-3D-en-cpp-avec-Allegro/build/CMakeFiles/3.31.3/CMakeCCompiler.cmake
-C:/wamp64/www/Projet Piscine/Environnement-3D-en-cpp-avec-Allegro/build/CMakeFiles/3.31.3/CMakeCXXCompiler.cmake
-C:/wamp64/www/Projet Piscine/Environnement-3D-en-cpp-avec-Allegro/build/CMakeFiles/3.31.3/CMakeRCCompiler.cmake
-C:/wamp64/www/Projet Piscine/Environnement-3D-en-cpp-avec-Allegro/build/CMakeFiles/3.31.3/CMakeSystem.cmake
+C:/vcpkg/installed/x64-windows/share/Allegro/AllegroConfig.cmake
+C:/vcpkg/installed/x64-windows/share/Allegro/AllegroConfigVersion.cmake
+C:/vcpkg/installed/x64-windows/share/Allegro/AllegroTargets-debug.cmake
+C:/vcpkg/installed/x64-windows/share/Allegro/AllegroTargets-release.cmake
+C:/vcpkg/installed/x64-windows/share/Allegro/AllegroTargets.cmake
+C:/wamp64/www/Environnement-3D-en-cpp-avec-Allegro/CMakeLists.txt
+C:/wamp64/www/Environnement-3D-en-cpp-avec-Allegro/build/CMakeFiles/3.31.4/CMakeCCompiler.cmake
+C:/wamp64/www/Environnement-3D-en-cpp-avec-Allegro/build/CMakeFiles/3.31.4/CMakeCXXCompiler.cmake
+C:/wamp64/www/Environnement-3D-en-cpp-avec-Allegro/build/CMakeFiles/3.31.4/CMakeRCCompiler.cmake
+C:/wamp64/www/Environnement-3D-en-cpp-avec-Allegro/build/CMakeFiles/3.31.4/CMakeSystem.cmake
