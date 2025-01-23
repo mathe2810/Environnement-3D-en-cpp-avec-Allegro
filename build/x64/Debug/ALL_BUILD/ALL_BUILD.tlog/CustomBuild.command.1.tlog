@@ -1,6 +1,6 @@
-^C:\WAMP64\WWW\ENVIRONNEMENT-3D-EN-CPP-AVEC-ALLEGRO\CMAKELISTS.TXT
+^C:\WAMP64\WWW\PROJET PISCINE\ENVIRONNEMENT-3D-EN-CPP-AVEC-ALLEGRO\CMAKELISTS.TXT
 setlocal
-C:\CMake\bin\cmake.exe -SC:/wamp64/www/Environnement-3D-en-cpp-avec-Allegro -BC:/wamp64/www/Environnement-3D-en-cpp-avec-Allegro/build --check-stamp-file C:/wamp64/www/Environnement-3D-en-cpp-avec-Allegro/build/CMakeFiles/generate.stamp
+C:\CMake\bin\cmake.exe "-SC:/wamp64/www/Projet Piscine/Environnement-3D-en-cpp-avec-Allegro" "-BC:/wamp64/www/Projet Piscine/Environnement-3D-en-cpp-avec-Allegro/build" --check-stamp-file "C:/wamp64/www/Projet Piscine/Environnement-3D-en-cpp-avec-Allegro/build/CMakeFiles/generate.stamp"
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone

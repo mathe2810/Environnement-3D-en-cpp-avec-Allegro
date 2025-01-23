@@ -5,7 +5,7 @@ project(Environnement-3D-en-cpp-avec-Allegro)
 set(CMAKE_TOOLCHAIN_FILE "C:/vcpkg/scripts/buildsystems/vcpkg.cmake" CACHE STRING "Vcpkg toolchain file")
 
 # Ajouter les fichiers source
-add_executable(Environnement-3D-en-cpp-avec-Allegro ./src/main.cpp)
+add_executable(Environnement-3D-en-cpp-avec-Allegro ./src/main.cpp ./src/render.cpp ./src/app.cpp ./src/object.cpp ./src/keyboard.cpp)
 
 # Ajouter un message de débogage pour vérifier les chemins de recherche
 message(STATUS "CMAKE_TOOLCHAIN_FILE: ${CMAKE_TOOLCHAIN_FILE}")
@@ -13,8 +13,11 @@ message(STATUS "CMAKE_PREFIX_PATH: ${CMAKE_PREFIX_PATH}")
 
 # Trouver et lier les bibliothèques Allegro 5, OpenGL et tinyobjloader
 find_package(Allegro CONFIG REQUIRED)
+find_package(tinyobjloader CONFIG REQUIRED)
 
 include_directories("C:/vcpkg/installed/x64-windows/include")
+
+# include_directories("C:wamp64/www/Projet Piscine/Environnement-3D-en-cpp-avec-Allegro/includes")
 
 
 
