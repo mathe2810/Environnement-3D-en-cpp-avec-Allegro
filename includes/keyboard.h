@@ -8,6 +8,6 @@
 #include "vertex.h"
 
 // Déclaration des fonctions
-void processInput(bool key[], std::vector<Vertex>& vertices, Vertex& referencePoint, bool running);
+void processInput(bool key[], std::vector<Vertex>& vertices, Vertex& referencePoint, bool& running);
 
 #endif // KEYBOARD_H

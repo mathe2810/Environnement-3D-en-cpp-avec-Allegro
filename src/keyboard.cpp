@@ -1,6 +1,6 @@
 #include "../includes/keyboard.h"
 
-void processInput(bool key[], std::vector<Vertex>& vertices, Vertex& referencePoint, bool running) {
+void processInput(bool key[], std::vector<Vertex>& vertices, Vertex& referencePoint, bool& running) {
     if (key[ALLEGRO_KEY_UP]) {
         for (auto& vertex : vertices) {
             translate(vertex, 0.0f, 0.0f, 0.1f);
